@@ -1,0 +1,23 @@
+证明线性筛的正确性(不重复性)https://blog.csdn.net/unclerunning/article/details/51044227 
+    int main()    
+    {    
+       long MAXP;    
+          cout << "输入范围MAXP [1~MAXP]：" << endl;
+       cin >> MAXP;
+
+    int *prime = new int[MAXP] ,num_prime(0);    
+    int *isNotPrime = new int[MAXP];  
+    isNotPrime[0]=1;isNotPrime[1]=1;
+        for(long i = 2 ; i <  MAXP ; i ++)    
+        {    
+            if(! isNotPrime[i])    
+                prime[num_prime ++]=i;    
+            for(long j = 0 ; j < num_prime && i * prime[j] <  MAXP ; j ++)    
+            {    
+                isNotPrime[i * prime[j]] = 1;    
+                if( !(i % prime[j]))    
+                    break;    
+            }    
+        }    
+        return 0;    
+    }  

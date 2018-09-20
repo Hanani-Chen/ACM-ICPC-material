@@ -1,0 +1,319 @@
+HDU1002   A + B Problem II
+
+【题意】大数相加
+
+【链接】http://acm.hdu.edu.cn/showproblem.php?pid=1002
+
+Sample Input
+
+2 1 2 112233445566778899 998877665544332211
+ 
+Sample Output
+
+Case 1: 1 + 2 = 3 Case 2: 112233445566778899 + 998877665544332211 = 1111111111111111110
+
+代码：
+
+    import java.io.*;
+    import java.util.*;
+    import java.math.BigInteger;//声明BigInteger大数类
+    import java.lang.*;
+    public class Main
+    {
+        public static void main(String args[])
+        {
+            Scanner cin = new Scanner(System.in);
+            int t,i=1;
+            t = cin.nextInt();
+            int tot = 0;
+            BigInteger a,b,c; //BigInteger类型
+            while (i<=t)
+            {
+                a=cin.nextBigInteger();
+                b=cin.nextBigInteger();
+                c=a.add(b);
+                System.out.println("Case "+i+":");
+                System.out.println(a+" + "+b+" = "+c);
+                if(i<t) System.out.println("");
+                i++;
+            }
+        }
+    }
+
+HDU1042 N!
+
+【题意】大数阶乘
+
+【链接】http://acm.hdu.edu.cn/showproblem.php?pid=1042
+
+Sample Input
+
+1 2 3
+ 
+Sample Output
+
+1 2 6
+
+代码：
+
+    import java.io.*;
+    import java.util.*;
+    import java.math.BigInteger;//声明BigInteger大数类
+    import java.lang.*;
+    public class FF
+    {
+        public static void main(String args[])
+        {
+            Scanner cin = new Scanner(System.in);
+            while(cin.hasNext())
+            {
+             int n=cin.nextInt();
+             BigInteger ans=BigInteger.ONE;
+             for(int i=1; i<=n; ++i)
+             {
+            	ans=ans.multiply(BigInteger.valueOf(i));
+             }
+             System.out.println(ans);
+             System.gc();	//调用垃圾回收机制
+            }
+        }
+    }
+
+HDU 1047 Integer Inquiry
+
+【题意】多个大数相加
+
+【链接】http://acm.hdu.edu.cn/showproblem.php?pid=1047
+
+Sample Input
+
+1 123456789012345678901234567890 123456789012345678901234567890 123456789012345678901234567890 0
+ 
+
+Sample Output
+
+370370367037037036703703703670
+注意下格式
+
+代码:
+
+    import java.io.*;
+    import java.util.*;
+    import java.math.BigInteger;//声明BigInteger大数类
+    import java.lang.*;
+    public class Main
+    {
+        public static void main(String args[])
+        {
+            Scanner cin = new Scanner(System.in);
+            int n=cin.nextInt();
+            while(n-->0)
+            {
+             BigInteger a,b,c;
+             b=BigInteger.ZERO;
+             while(cin.hasNextBigInteger())
+             {
+            	 c=BigInteger.ZERO;
+            	 c=cin.nextBigInteger();
+            	 if(!c.equals(BigInteger.valueOf(0)))
+            		 b=b.add(c);
+            	 else 
+            	 {
+            		 System.out.println(b);
+            		 if(n!=0)
+            			 System.out.println("");
+            		 break;
+            	 }
+             }
+             System.gc();	
+            }
+        }
+    }
+
+
+HDU 1715  大菲波数
+
+【题意】RT
+
+【链接】http://acm.hdu.edu.cn/showproblem.php?pid=1715
+
+Sample Input
+
+5 1 2 3 4 5
+ 
+Sample Output
+
+1 1 2 3 5
+
+代码：
+
+    import java.io.*;
+    import java.util.*;
+    import java.math.BigInteger;//声明BigInteger大数类
+    import java.lang.*;
+    public class Main
+    {
+        public static void main(String args[])
+        {
+            Scanner cin = new Scanner(System.in);
+            int n=cin.nextInt();
+             BigInteger fac[]= new BigInteger[1001];
+            fac[0]=BigInteger.ZERO;//初始赋值
+            fac[1]=BigInteger.ONE;
+            for(int i=2; i<=1000; ++i) fac[i]=fac[i-1].add(fac[i-2]);
+            while(n-->0)
+            {
+            	int a;
+            	a=cin.nextInt();
+            	System.out.println(fac[a]);
+            }
+             //System.gc();	
+        }
+    }
+
+
+ HDU 1063  Exponentiation
+
+【题意】高精度幂
+
+【链接】http://acm.hdu.edu.cn/showproblem.php?pid=1063
+
+Sample Input
+
+95.123 12 0.4321 20 5.1234 15 6.7592 9 98.999 10 1.0100 12
+ 
+Sample Output
+
+548815620517731830194541.899025343415715973535967221869852721 .00000005148554641076956121994511276767154838481760200726351203835429763013462401 43992025569.928573701266488041146654993318703707511666295476720493953024 29448126.764121021618164430206909037173276672 90429072743629540498.107596019456651774561044010001 1.126825030131969720661201
+
+最简形式是去掉后面的 0，以及小于 1 的小数的小数点前的 0
+
+实现高精度幂java方法：
+
+（1）调用pow函数
+
+（2）for循环
+
+代码：
+
+    import java.io.*;
+    import java.util.*;
+    import java.math.BigDecimal;
+    import java.math.BigInteger;//声明BigInteger大数类
+    import java.lang.*;
+    public class Main
+    {
+        public static void main(String args[])
+        {
+            Scanner cin = new Scanner(System.in);
+            while(cin.hasNext())
+            {
+            BigDecimal ans=cin.nextBigDecimal();
+            int n=cin.nextInt();
+            String res=ans.pow(n).stripTrailingZeros().toPlainString();//整数去掉小数点和后面的0
+
+           if(res.startsWith("0"))//去掉前导0
+               {
+            	   res=res.substring(1);
+               }
+               System.out.println(res); 
+          /*  BigDecimal a=BigDecimal.ONE;
+            int n=cin.nextInt();
+            for(int i=1; i<=n; ++i)
+            	a=a.multiply(ans);
+            String res=a.stripTrailingZeros().toPlainString();
+               if(res.startsWith("0"))
+               {
+            	   res=res.substring(1);
+               }
+               System.out.println(res);
+           */
+            }
+        }
+    }
+
+
+HDU 1316   How Many Fibs?
+
+【题意】区间fibonacci
+
+【链接】http://acm.hdu.edu.cn/showproblem.php?pid=1316
+
+Sample Input
+
+10 100 1234567890 9876543210 0 0
+ 
+Sample Output
+
+5 4
+
+代码：
+
+    import java.io.*;
+    import java.util.*;
+    import java.math.BigDecimal;
+    import java.math.BigInteger;//声明BigInteger大数类
+    public class Main
+    {
+        public static void main(String args[])
+        {
+            Scanner cin = new Scanner(System.in);
+            BigInteger a,b; 
+            int ans,i;
+            BigInteger fac[]=new BigInteger[1005];
+            BigInteger zero=BigInteger.ZERO;
+            fac[1]=BigInteger.valueOf(1);
+            fac[2]=BigInteger.valueOf(2);
+            for(i=3; i<1005; ++i) fac[i]=fac[i-1].add(fac[i-2]);
+            while(cin.hasNextBigInteger())
+            {
+               a=cin.nextBigInteger();
+               b=cin.nextBigInteger();
+               if(a.compareTo(zero)==0&&b.compareTo(zero)==0) break;
+               for(ans=0,i=1; i<1005; ++i)
+               {
+            	   if(a.compareTo(fac[i])<=0&&b.compareTo(fac[i])>=0) ans++;
+            	   if(b.compareTo(fac[i])<0) break;
+               }
+              System.out.println(ans);
+            }
+        }
+    }
+
+
+HDU 1753   大明A+B (高精度)
+
+【题意】高精度小数相加
+
+【链接】http://acm.hdu.edu.cn/showproblem.php?pid=1753
+
+Sample Input
+
+1.1 2.9 1.1111111111 2.3444323343 1 1.1
+ 
+Sample Output
+
+4 3.4555434454 2.1
+
+代码：
+
+    import java.io.*;
+    import java.util.*;
+    import java.math.BigDecimal;
+    import java.math.BigInteger;//声明BigInteger大数类
+    public class Main
+    {
+        public static void main(String args[])
+        {
+            Scanner cin = new Scanner(System.in);
+            BigDecimal a,b,c;
+            while(cin.hasNextBigDecimal())
+            {
+            	a=cin.nextBigDecimal();
+            	b=cin.nextBigDecimal();
+            	c=a.add(b);
+            	String res=c.stripTrailingZeros().toPlainString();
+            	System.out.println(res);
+            }
+        }
+    }

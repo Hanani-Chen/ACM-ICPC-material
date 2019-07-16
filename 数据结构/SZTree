@@ -1,0 +1,10 @@
+ll C[N];
+int n;
+ll lowbit(ll t) { return t&(-t); }
+ll getsum(ll x) {
+	ll ans=0;
+	for(ll i=x;i>0;i-=lowbit(i))
+		ans+=C[i];
+	return ans;
+}
+void add(ll x,ll y) { for(ll i=x;i<=n;i+=lowbit(i)) C[i]+=y; }

@@ -1,3 +1,5 @@
+基本几何模板
+/*********************************************/
 typedef db T;
 //const db eps = 1e-7, pi = acosl(-1.);
 int sgn(T x) { return (x > eps) - (x < -eps); }
@@ -82,3 +84,48 @@ polygon Convex(polygon A) {  // 求凸包，逆时针排序（ 内角 <180 : (<=
         while (sz(B) > t && crossSgn(B[sz(B)-2], B.back(), A[i]) < 0) B.pop_back();  // 同上
     B.pop_back(); return B;
 }
+/******************************************************/
+
+
+
+最小圆覆盖
+/******************************************************/
+struct node{
+	db x,y;
+};
+node P[N];
+node ans;
+db R;
+inline db sqr(db x) {return x*x;}
+inline db dis(node x,node y) {return sqrt(sqr(x.x-y.x)+sqr(x.y-y.y));}
+bool incircle(node x) { if(dis(ans,x)<=R+eps) return true;else return false;}
+node solve(db a,db b,db c,db d,db e,db f) {
+	db y=(f*a-c*d)/(b*d-e*a);
+	db x=(f*b-c*e)/(a*e-b*d);
+	return (node){x,y};
+}
+int main() {
+	int n;cin >> n;
+	ff(i,1,n) cin >> P[i].x >> P[i].y;
+	random_shuffle(P+1,P+n+1);
+	R=0;
+	ff(i,1,n) if(!incircle(P[i])) {
+		ans.x=P[i].x;ans.y=P[i].y;R=0;
+		ff(j,1,i-1) if(!incircle(P[j])) {
+			ans.x=(P[i].x+P[j].x)/2.0;
+			ans.y=(P[i].y+P[j].y)/2.0;
+			R=dis(ans,P[i]);
+			ff(k,1,j-1) if(!incircle(P[k])) {
+				ans=solve(
+					P[i].x-P[j].x,P[i].y-P[j].y,
+					(sqr(P[j].x)+sqr(P[j].y)-sqr(P[i].x)-sqr(P[i].y))/2.0,
+					P[i].x-P[k].x,P[i].y-P[k].y,
+					(sqr(P[k].x)+sqr(P[k].y)-sqr(P[i].x)-sqr(P[i].y))/2.0
+				);
+				R=dis(P[i],ans);
+			}
+		}
+	}
+	printf("%.10f\n%.10f %.10f",R,ans.x,ans.y);
+}
+/******************************************************/

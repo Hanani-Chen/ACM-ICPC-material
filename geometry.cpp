@@ -162,4 +162,64 @@ double solve()
     }
     return ans;
 }
+/**************************/
+
+
+
+最小球覆盖(三分法)
 /**********************************/
+const double eps=1e-7;
+typedef struct {double p[3];}point;
+point a[maxn];
+int n;
+double xx,yy,zz;
+double cal(point now){
+	xx=now.p[0];
+	yy=now.p[1];
+	zz=now.p[2];
+    double ans=0.0;
+    for(int i=0;i<n;i++) {
+    	double hh=sqrt((a[i].p[0]-now.p[0])*(a[i].p[0]-now.p[0])+(a[i].p[1]-now.p[1])*(a[i].p[1]-now.p[1])+(a[i].p[2]-now.p[2])*(a[i].p[2]-now.p[2]));
+    	if(hh>ans) {
+			//xx=now.p[0];yy=now.p[1];zz=now.p[2];
+			ans=hh;
+    	}
+    }
+    return ans;
+}
+point del(point now,int cnt){
+    if(cnt>=3)
+        return now;
+    double r=100000,l=-100000;
+    double dr,dl;
+    point tp1,tp2,ans1,ans2,ans;
+    tp1=tp2=ans=now;
+    while(r-l>eps){
+        dr=(2*r+l)/3;
+        dl=(2*l+r)/3;
+        tp1.p[cnt]=dl;
+        tp2.p[cnt]=dr;
+        ans1=del(tp1,cnt+1);
+        ans2=del(tp2,cnt+1);
+        if(cal(ans1)>cal(ans2)){
+            l=dl;
+            ans=ans1;
+        }
+        else{
+            r=dr;
+            ans=ans2;
+        }
+    }
+    return ans;
+}
+int main(){
+    while(scanf("%d",&n)!=EOF){
+        for(int i=0;i<n;i++)
+            scanf("%lf%lf%lf",&a[i].p[0],&a[i].p[1],&a[i].p[2]);
+        point ans;
+        printf("%lf\n",cal(del(ans,0)));
+        //printf("%lf %lf %lf\n",xx,yy,zz);
+    }
+    return 0;
+}
+/**************************/

@@ -19,3 +19,5 @@ f(2n-2m-2)[f(2n)+f(2n+2)]=f(2m+2)+f(4n-2m) [ n〉m≥-1，且n≥1]
 f(2n)/f(n)=f(n-1)+f(n+1)  
 ## 其他公式  
 ![](https://gss0.bdstatic.com/94o3dSag_xI4khGkpoWK1HF6hhy/baike/s%3D148/sign=0ebf9b27cc1b9d168ec79e65cbdfb4eb/fc1f4134970a304e5d66a902d3c8a786c8175c85.jpg)  
+# 杨辉三角
+http://www.360doc.com/content/17/1121/20/4295303_705961840.shtml

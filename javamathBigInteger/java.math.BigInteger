@@ -1,3 +1,42 @@
+判是否是完全平方数
+/**********************************/
+import java.math.BigInteger;
+import java.util.*;
+
+public class Main {
+	
+	public static void main(String[] args) {
+		Scanner cin=new Scanner(System.in);
+		int T=cin.nextInt();
+		for(int i=1;i<=T;i++) {
+			BigInteger n=cin.nextBigInteger();
+			BigInteger m=n.multiply(n.subtract(BigInteger.ONE)).shiftRight(1);
+			boolean q1=is(n);
+			boolean q2=is(m);
+			if(q1&&q2) System.out.println("Arena of Valor");
+			else if(q1&&!q2) System.out.println("Hearth Stone");
+			else if(!q1&&q2) System.out.println("Clash Royale");
+			else System.out.println("League of Legends");
+		}
+	}
+	
+	public static boolean is(BigInteger n) {
+		BigInteger low=BigInteger.ZERO;
+		BigInteger high=n;
+		while(low.compareTo(high)<=0) {
+			BigInteger mid=low.add(high).shiftRight(1);
+			BigInteger sq=mid.multiply(mid);
+			int check=sq.compareTo(n);
+			if(check==0) return true;
+			else if(check>0) high=mid.subtract(BigInteger.ONE);
+			else low=mid.add(BigInteger.ONE);
+		}
+		return false;
+	}
+	
+}
+/**********************************/
+
 HDU1002   A + B Problem II
 
 【题意】大数相加

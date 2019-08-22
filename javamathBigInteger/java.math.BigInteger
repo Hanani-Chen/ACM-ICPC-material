@@ -1,3 +1,26 @@
+文件读入,标准输出
+/**********************************/
+import java.io.*;
+import java.util.*;
+import java.math.*;
+public class Main {
+	public static void main(String [] args) throws Exception {
+		
+		Scanner cin = new Scanner(new FileReader("lazy.in"));
+		//PrintWriter out = new PrintWriter("output.txt");
+		int n=cin.nextInt();
+		for(int i=1;i<=n;i++) {
+			BigInteger now;
+			now=cin.nextBigInteger();
+			System.out.println("Case "+i+": "+now.subtract(BigInteger.ONE));
+		}
+		cin.close();
+	}
+}
+/**********************************/
+
+
+
 判是否是完全平方数
 /**********************************/
 import java.math.BigInteger;

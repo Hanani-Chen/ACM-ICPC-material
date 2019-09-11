@@ -504,3 +504,98 @@ int main() {
 	}	
 }
 /***************************/
+
+
+
+
+
+
+lca倍增
+/***************************/
+const int MAXN=5e5+5;
+const int DEG=20;
+struct Edge {
+	int to,next;
+}edge[MAXN*2];
+int head[MAXN],tot;
+void addedge(int u,int v) {
+	edge[tot].to=v;
+	edge[tot].next=head[u];
+	head[u]=tot++;
+}
+void init() {
+	tot=0;
+	mem(head,-1);
+}
+int fa[MAXN][DEG];
+int deg[MAXN];
+void BFS(int root) {
+	queue<int>que;
+	deg[root]=0;
+	fa[root][0]=root;
+	que.push(root);
+	while(!que.empty()) {
+		int tmp=que.front();
+		que.pop();
+		ff(i,1,DEG-1)
+			fa[tmp][i]=fa[fa[tmp][i-1]][i-1];
+		for(int i=head[tmp];i!=-1;i=edge[i].next) {
+			int v=edge[i].to;
+			if(v==fa[tmp][0]) continue;
+			deg[v]=deg[tmp]+1;
+			fa[v][0]=tmp;
+			que.push(v);
+		}
+	}
+}
+int LCA(int u,int v) {
+	if(deg[u]>deg[v]) swap(u,v);
+	int hu=deg[u],hv=deg[v];
+	int tu=u,tv=v;
+	for(int det=hv-hu,i=0;det;det>>=1,i++)
+		if(det&1)
+			tv=fa[tv][i];
+	if(tu==tv) return tu;
+	fd(i,DEG-1,0) {
+	//for(int i=DEG-1;i>=0;i--){
+		if(fa[tu][i]==fa[tv][i]) continue;
+		tu=fa[tu][i];
+		tv=fa[tv][i];
+	}
+	return fa[tu][0];
+}
+bool flag[MAXN];
+int main() {
+	int T;
+	T=1; 
+	ff(tt,1,T) {
+		init();
+		mem(flag,0);
+		int n;
+		int k;;
+		int root;
+		scanf("%d%d%d",&n,&k,&root);
+	//	de(root);
+		ff(i,1,n-1) {
+			int u,v;
+			scanf("%d%d",&u,&v);
+			addedge(u,v);
+			addedge(v,u);
+			//flag[v]=i;
+		}
+			/*int root;
+			ff(i,1,n) if(!flag[i]) {
+				root=i;
+				break;
+			}*/
+		//	de(root);
+			BFS(root);
+			ff(i,1,k) {
+				int u,v;
+				scanf("%d%d",&u,&v);
+				//(u);de(v);
+				printf("%d\n",LCA(u,v));
+			}
+	}
+}
+/****************************/

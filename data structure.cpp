@@ -13,6 +13,49 @@ void add(ll x,ll y) { for(ll i=x;i<=n;i+=lowbit(i)) C[i]+=y; }
 /*********************/
 
 
+//树状数组区间修改区间查询
+/*********************/
+int n,m;
+const int N=1e5+5;
+ll sum1[N],sum2[N];
+ll lowbit(ll n) { return (n&(-n)); }
+ll add(ll p,ll x) {
+	for(int i=p;i<=n;i+=lowbit(i)) 
+		sum1[i]+=x,sum2[i]+=x*p; }
+ll range_add(ll l,ll r,ll x) {
+	add(l,x),add(r+1,-x); }
+ll ask(ll p) {
+	ll res=0;
+	for(int i=p;i;i-=lowbit(i)) {
+		res+=(p+1)*sum1[i]-sum2[i];
+	}
+	return res; }
+ll range_ask(ll l,ll r) {
+	return (ask(r)-ask(l-1)); }
+int main() {
+	scanf("%lld%lld",&n,&m);
+	ll last=0;
+	for(int i=1;i<=n;i++) {
+		ll now;
+		scanf("%lld",&now);
+		add(i,now-last);
+		last=now;
+	}
+	for(int i=1;i<=m;i++) {
+		ll op,L,R;
+		scanf("%lld%lld%lld",&op,&L,&R);
+		if(op==1) {
+			ll x;
+			scanf("%lld",&x);
+			range_add(L,R,x);
+		}else {
+			printf("%lld\n",range_ask(L,R));
+		}
+	}
+}
+/*********************/
+
+
 
 //线段树
 /*********************/

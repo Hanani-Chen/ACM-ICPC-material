@@ -143,143 +143,6 @@ ff(i,1,n) SST.updata(1,hh,root[i],root[i-1],getid(a[i]));*/
 
 
 
-//Splay伸展树
-/*********************/
-struct node { 
-	#define MAXN 1000000
-	int ch[MAXN][2],f[MAXN],size[MAXN],cnt[MAXN],key[MAXN];
-	int sz,root;
-	inline void clear(int x){
-		ch[x][0]=ch[x][1]=f[x]=size[x]=cnt[x]=key[x]=0;
-	}
-	inline bool get(int x){
-		return ch[f[x]][1]==x;
-	}
-	inline void update(int x){
-		if (x){
-			size[x]=cnt[x];
-			if (ch[x][0]) size[x]+=size[ch[x][0]];
-			if (ch[x][1]) size[x]+=size[ch[x][1]];
-		}
-	}
-	inline void rotate(int x){
-		int old=f[x],oldf=f[old],whichx=get(x);
-		ch[old][whichx]=ch[x][whichx^1]; f[ch[old][whichx]]=old;
-		ch[x][whichx^1]=old; f[old]=x;
-		f[x]=oldf;
-		if (oldf)
-			ch[oldf][ch[oldf][1]==old]=x;
-		update(old); update(x);
-	}
-	inline void splay(int x){
-		for (int fa;fa=f[x];rotate(x))
-		  if (f[fa])
-		    rotate((get(x)==get(fa))?fa:x);
-		root=x;
-	}
-	inline void insert(int x){
-		if (root==0){sz++; ch[sz][0]=ch[sz][1]=f[sz]=0; root=sz; size[sz]=cnt[sz]=1; key[sz]=x; return;}
-		int now=root,fa=0;
-		while(1){
-			if (x==key[now]){
-				cnt[now]++; update(now); update(fa); splay(now); break;
-			}
-			fa=now;
-			now=ch[now][key[now]<x];
-			if (now==0){
-				sz++;
-				ch[sz][0]=ch[sz][1]=0;
-				f[sz]=fa;
-				size[sz]=cnt[sz]=1;
-				ch[fa][key[fa]<x]=sz;
-				key[sz]=x;
-				update(fa);
-				splay(sz);
-				break;
-			}
-		}
-	}
-	inline int find(int x){
-		int now=root,ans=0;
-		while(1){
-			if (x<key[now])
-			  now=ch[now][0];
-			else{
-				ans+=(ch[now][0]?size[ch[now][0]]:0);
-				if (x==key[now]){
-					splay(now); return ans+1;
-				}
-				ans+=cnt[now];
-				now=ch[now][1];
-			}
-		}
-	}
-	inline int findx(int x){
-		int now=root;
-		while(1){
-			if (ch[now][0]&&x<=size[ch[now][0]])
-			  now=ch[now][0];
-			else{
-				int temp=(ch[now][0]?size[ch[now][0]]:0)+cnt[now];
-				if (x<=temp) return key[now];
-				x-=temp; now=ch[now][1];
-			}
-		}
-	}
-	inline int pre(){
-		int now=ch[root][0];
-		while (ch[now][1]) now=ch[now][1];
-		return now;
-	}
-	inline int next(){
-		int now=ch[root][1];
-		while (ch[now][0]) now=ch[now][0];
-		return now;
-	}
-	inline void del(int x){
-		int whatever=find(x);
-		if (cnt[root]>1){cnt[root]--; update(root); return;}
-		if (!ch[root][0]&&!ch[root][1]) {clear(root); root=0; return;}
-		if (!ch[root][0]){
-			int oldroot=root; root=ch[root][1]; f[root]=0; clear(oldroot); return;
-		}
-		else if (!ch[root][1]){
-			int oldroot=root; root=ch[root][0]; f[root]=0; clear(oldroot); return;
-		}
-		int leftbig=pre(),oldroot=root;
-		splay(leftbig);
-		ch[root][1]=ch[oldroot][1];
-		f[ch[oldroot][1]]=root;
-		clear(oldroot);
-		update(root); 
-	}
-}SPL;
-int main(){
-	int n,opt,x;
-	scanf("%d",&n);
-	for (int i=1;i<=n;++i){
-		scanf("%d%d",&opt,&x);
-		switch(opt){
-			case 1: SPL.insert(x); break;
-			case 2: SPL.del(x); break;
-			case 3: printf("%d\n",SPL.find(x)); break;
-			case 4: printf("%d\n",SPL.findx(x)); break;
-			case 5: SPL.insert(x); printf("%d\n",SPL.key[SPL.pre()]); SPL.del(x); break;
-			case 6: SPL.insert(x); printf("%d\n",SPL.key[SPL.next()]); SPL.del(x); break;
-		}
-	}
-	/* 您需要写一种数据结构（可参考题目标题），来维护一些数，其中需要提供以下操作：
-	1. 插入x数
-	2. 删除x数(若有多个相同的数，因只删除一个)
-	3. 查询x数的排名(若有多个相同的数，因输出最小的排名)
-	4. 查询排名为x的数
-	5. 求x的前驱(前驱定义为小于x，且最大的数)
-	6. 求x的后继(后继定义为大于x，且最小的数)
-	n个节点m次操作splay
-	O(nlog2(n)+mlog2(n))*/
-}
-/*********************/
-
 
 //区间某k大之间求个数
 /*********************/
@@ -898,3 +761,141 @@ int main()
 2 1 3
 */ 
 /*************************************/
+
+
+
+平衡树splay
+/**************************************/
+#include<bits/stdc++.h>
+using namespace std;
+typedef long long ll;
+typedef pair<ll,ll>pll;
+typedef double db;
+/* Nothing is ture,  (22)
+Everything is permitted*/
+#define fi  first
+#define se second
+#define pb(x)        push_back(x)
+#define mp(a,b)    make_pair(a,b)
+#define sz(a)   ((int)(a).size())
+#define all(x)  x.begin(),x.end()
+#define msort(a) sort(a+1,a+1+n);
+#define endl "\n"
+
+#define ff(i,a,b) for(ll i=a;i<=b;++i)
+#define fd(i,a,b) for(ll i=a;i>=b;--i)
+
+#define de(a) cout << #a << " = " << a << endl;
+#define dd(a) cout << #a << " = " << a << "  ";
+
+#define INF 0x3f3f3f3f
+#define INFF 0x3f3f3f3f3f3f3f3f
+#define mem(a,b)   memset(a,b,sizeof(a))
+#define file freopen("in.txt","r",stdin)
+#define jkl ios::sync_with_stdio(false);cin.tie(0);
+/*********************************************/
+const int N=2e5+6;
+int ch[N][2],par[N],val[N],cnt[N],size[N],ncnt,root;
+bool chk(int x) {
+	return ch[par[x]][1]==x;
+}
+void pushup(int x) {
+	size[x]=size[ch[x][0]]+size[ch[x][1]]+cnt[x];
+}
+void rotate(int x) {
+	int y=par[x],z=par[y],k=chk(x),w=ch[x][k^1];
+	ch[y][k]=w;par[w]=y;
+	ch[z][chk(y)]=x;par[x]=z;
+	ch[x][k^1]=y;par[y]=x;
+	pushup(y);pushup(x);
+}
+void splay(int x,int goal=0) {
+	while(par[x]!=goal) {
+		int y=par[x],z=par[y];
+		if(z!=goal) {
+			if(chk(x)==chk(y)) rotate(y);
+			else rotate(x);
+		}
+		rotate(x);
+	}
+	if(!goal) root=x;
+}
+void insert(int x) {
+	int cur=root,p=0;
+	while(cur&&val[cur]!=x) {
+		p=cur;
+		cur=ch[cur][x>val[cur]];
+	}
+	if(cur) {
+		cnt[cur]++;
+	}else {
+		cur=++ncnt;
+		if(p)ch[p][x>val[p]]=cur;
+		ch[cur][0]=ch[cur][1]=0;
+		par[cur]=p;val[cur]=x;
+		cnt[cur]=size[cur]=1;
+	}
+	splay(cur);
+}
+void find(int x) {
+	int cur=root;
+	while(ch[cur][x>val[cur]]&&x!=val[cur]) {
+		cur=ch[cur][x>val[cur]];
+	}
+	splay(cur);
+}
+int kth(int k) {
+	int cur=root;
+	while(1) {
+		if(ch[cur][0]&&k<=size[ch[cur][0]]) {
+			cur=ch[cur][0];
+		}else if(k>size[ch[cur][0]]+cnt[cur]) {
+			k-=size[ch[cur][0]]+cnt[cur];
+			cur=ch[cur][1];
+		}else {
+			return cur;
+		}
+	}
+}
+int pre(int x) {
+	find(x);
+	if(val[root]<x) return root;
+	int cur=ch[root][0];
+	while(ch[cur][1]) cur=ch[cur][1];
+	return cur;
+}
+int succ(int x) {
+	find(x);
+	if(val[root]>x) return root;
+	int cur=ch[root][1];
+	while(ch[cur][0]) cur=ch[cur][0];
+	return cur;
+}
+void remove(int x) {
+	int last=pre(x),next=succ(x);
+	splay(last);splay(next,last);
+	int del=ch[next][0];
+	if(cnt[del]>1) {
+		cnt[del]--;
+		splay(del);
+	}
+	else ch[next][0]=0;
+}
+int n,op,x;
+int main() {
+	scanf("%d",&n);
+	insert(0x3f3f3f3f);
+	insert(0xcfcfcfcf);
+	while(n--) {
+		scanf("%d%d",&op,&x);
+		switch(op) {
+			case 1: insert(x);break;
+			case 2: remove(x);break;
+			case 3: find(x);printf("%d\n",size[ch[root][0]]);break;
+			case 4: printf("%d\n",val[kth(x+1)]);break;
+			case 5: printf("%d\n",val[pre(x)]);break;
+			case 6: printf("%d\n",val[succ(x)]);break;
+		}
+	}
+}
+/*****************************/

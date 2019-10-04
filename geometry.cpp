@@ -223,3 +223,42 @@ int main(){
     return 0;
 }
 /**************************/
+
+极角排序
+/***************************/
+struct node {
+	ll x,y;
+    __int128 len;
+    bool operator<(const node aa)const {
+    	return len<aa.len;
+    }
+}a[N],c,aa[N];
+ll compare(node a,node b,node c) {
+	return (b.x-a.x)*(c.y-a.y)-(b.y-a.y)*(c.x-a.x);
+}
+bool cmp3(node a,node b) {
+	if(compare(c,a,b)==0)
+		return a.x<b.x;
+	else return compare(c,a,b)>0;
+}
+bool cmp2(node a,node b) {
+    return a.len<b.len;
+}
+ll cha(node a,node b,node now) {
+	return ((a.x-now.x)*(b.x-now.x)+(a.y-now.y)*(b.y-now.y));
+}
+int qq(node a) {
+	ll xx=a.x-c.x; ll yy=a.y-c.y;
+	if(xx>0&&yy>=0) return 1; 
+	else if(xx<=0&&yy>0) return 2; 
+	else if(xx<0&&yy<=0) return 3;
+	else return 4;
+}
+bool cmp4(node a,node b) {
+	if(qq(a)==qq(b)) return cmp3(a,b);
+	else return qq(a)<qq(b);
+}
+ll dis(node a,node b) {
+    return (a.x-b.x)*(a.x-b.x)+(a.y-b.y)*(a.y-b.y);
+}
+/*******************************/
